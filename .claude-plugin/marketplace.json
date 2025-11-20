@@ -1,0 +1,14 @@
+{
+  "name": "frappe-claude",
+  "description": "Claude Code plugins for Frappe Framework and ERPNext development",
+  "owner": {
+    "name": "UnityAppSuite"
+  },
+  "plugins": [
+    {
+      "name": "frappe-fullstack",
+      "source": "./plugins/frappe-fullstack",
+      "description": "Comprehensive Frappe/ERPNext full-stack development with DocType scaffolding, bench integration, and specialized agents"
+    }
+  ]
+}
