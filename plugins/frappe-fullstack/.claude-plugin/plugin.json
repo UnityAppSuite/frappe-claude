@@ -1,0 +1,20 @@
+{
+  "name": "frappe-fullstack",
+  "description": "Comprehensive Frappe/ERPNext full-stack development with DocType scaffolding, bench integration, and specialized agents for server-side Python, client-side JavaScript, and ERPNext customization",
+  "version": "1.0.0",
+  "author": {
+    "name": "Badal"
+  },
+  "homepage": "https://github.com/UnityAppSuite/frappe-claude",
+  "license": "MIT",
+  "keywords": [
+    "frappe",
+    "erpnext",
+    "doctype",
+    "python",
+    "javascript",
+    "erp",
+    "full-stack",
+    "bench"
+  ]
+}
