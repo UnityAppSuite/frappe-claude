@@ -61,6 +61,7 @@ git clone https://github.com/UnityAppSuite/frappe-claude.git
 |---------|-------------|
 | `/frappe-bench` | Execute bench commands safely |
 | `/frappe-test` | Run Frappe tests with various options |
+| `/frappe-github` | Git workflows - branches, commits, PRs |
 
 ### Specialized Agents
 
@@ -72,6 +73,7 @@ git clone https://github.com/UnityAppSuite/frappe-claude.git
 | `erpnext-customizer` | ERPNext customization patterns |
 | `frappe-debugger` | Debug and troubleshoot issues |
 | `frappe-planner` | Strategic planning and architecture design |
+| `github-workflow` | Git/GitHub workflows with team conventions |
 
 ### Skills (Auto-Invoked)
 
@@ -126,6 +128,33 @@ This will:
    - Phased task breakdown
    - Testing and deployment strategy
 5. Save plan as markdown file
+
+#### Git/GitHub Workflow
+```
+/frappe-github create branch
+```
+This will:
+1. Ask for branch type (feature, bugfix, hotfix, refactor, docs)
+2. Ask for task ID (e.g., Jira ticket, GitHub issue number)
+3. Ask for brief description (1-3 words)
+4. Create branch from default branch with format: `{type}/{task-id}-{description}`
+   - Example: `feature/123-payment-gateway`, `bugfix/456-invoice-fix`
+
+```
+/frappe-github commit
+```
+This will:
+1. Show current changes (staged/unstaged)
+2. Ask for commit message
+3. Create commit WITHOUT co-author or generated footers
+
+```
+/frappe-github create pr
+```
+This will:
+1. Push branch to remote
+2. Create PR with proper title and description
+3. Return PR URL
 
 ### Scaffolding Commands
 

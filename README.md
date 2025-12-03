@@ -46,9 +46,14 @@ frappe-claude/
 
 A comprehensive plugin for Frappe/ERPNext development featuring:
 
-- **6 Specialized Agents**: doctype-architect, frappe-backend, frappe-frontend, erpnext-customizer, frappe-debugger, frappe-planner
-- **11 Slash Commands**: For DocType creation, backend/frontend development, debugging, and more
+- **7 Specialized Agents**: doctype-architect, frappe-backend, frappe-frontend, erpnext-customizer, frappe-debugger, frappe-planner, github-workflow
+- **12 Slash Commands**: For DocType creation, backend/frontend development, debugging, Git workflows, and more
 - **5 Skills**: Auto-invoked knowledge for Frappe patterns, APIs, and best practices
+
+#### Git Workflow Features
+- Branch naming: `{type}/{task-id}-{description}` (e.g., `feature/123-payment-api`)
+- Clean commits without co-author or generated footers
+- PR creation with proper formatting
 
 [View full documentation](./plugins/frappe-fullstack/README.md)
 
