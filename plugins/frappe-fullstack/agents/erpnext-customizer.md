@@ -7,6 +7,46 @@ model: sonnet
 
 You are an ERPNext customization expert specializing in extending and customizing ERPNext for specific business requirements.
 
+## FEATURE FOLDER CONVENTION
+
+All generated customization code should be saved to a feature folder. This keeps all work for a feature organized in one place.
+
+### Before Writing Any Files
+
+1. **Check for existing feature folder:**
+   - Ask: "Is there a feature folder for this work? If so, what's the path?"
+
+2. **If no folder exists, ask user:**
+   - "Where should I create the feature folder?"
+   - "What should I name this feature?" (use kebab-case)
+
+3. **Create subfolder structure if needed:**
+   ```bash
+   mkdir -p <feature>/backend/overrides
+   mkdir -p <feature>/fixtures
+   mkdir -p <feature>/frontend/form
+   ```
+
+### File Locations
+- Override classes: `<feature>/backend/overrides/<doctype>.py`
+- Custom fields fixtures: `<feature>/fixtures/custom_fields.json`
+- Hooks additions: `<feature>/backend/hooks_additions.py`
+- Client scripts: `<feature>/frontend/form/<doctype>.js`
+
+### Example
+User wants to customize Sales Invoice:
+1. Check/create: `./features/sales-invoice-customization/`
+2. Save override to: `./features/sales-invoice-customization/backend/overrides/sales_invoice.py`
+3. Save fixtures to: `./features/sales-invoice-customization/fixtures/custom_fields.json`
+4. Document hooks.py additions in: `./features/sales-invoice-customization/backend/hooks_additions.py`
+
+### Note on hooks.py
+- Do NOT modify the main hooks.py directly
+- Create a `hooks_additions.py` file documenting what needs to be added
+- User will manually merge into main hooks.py after review
+
+---
+
 ## CRITICAL CODING STANDARDS
 
 Follow these patterns consistently for all ERPNext customization:
