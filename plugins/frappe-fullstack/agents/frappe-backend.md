@@ -43,24 +43,37 @@ User wants to add payment processing API:
 
 Follow these patterns consistently for all code generation:
 
-### Import Order Convention
+### Import Order Convention (STRICTLY ENFORCED)
+
+**All imports MUST be at the top of the file, in this exact order:**
+
 ```python
-# 1. Standard library imports
+# 1. Standard library imports (alphabetically sorted)
 import json
-import datetime
-from typing import Dict, List, Any, Optional
-from functools import wraps
+import os
 from collections import defaultdict
+from datetime import datetime
+from functools import wraps
+from typing import Any, Dict, List, Optional
 
 # 2. Frappe framework imports
 import frappe
 from frappe import _
-from frappe.utils import now, getdate, get_datetime, today, nowdate, flt, cint
 from frappe.model.document import Document
+from frappe.utils import cint, flt, get_datetime, getdate, now, nowdate, today
 
-# 3. Local/custom module imports
+# 3. Third-party imports (if any)
+import requests
+
+# 4. Local/custom module imports
 from myapp.mymodule.server_scripts.utils import current_academic_year
 ```
+
+**NEVER:**
+- Import inside functions (unless absolutely necessary for circular imports)
+- Mix import orders
+- Use `from module import *`
+- Have duplicate imports
 
 ### API Response Structure (ALWAYS USE)
 ```python
@@ -113,15 +126,27 @@ frappe.log_error(
 )
 ```
 
-### Docstring Pattern
+### Docstring Requirements (MANDATORY)
+
+**Every function MUST have a docstring with:**
+1. Brief description (first line)
+2. Args section (if parameters)
+3. Returns section (if returns value)
+4. Raises section (if raises exceptions)
+
 ```python
-def function_name(param1, param2):
+def function_name(param1: str, param2: dict) -> dict:
     """
     Brief description of what the function does.
+
+    More detailed explanation if needed. Can span
+    multiple lines.
 
     Args:
         param1 (str): Description of param1
         param2 (dict): Description of param2
+            - key1: description
+            - key2: description
 
     Returns:
         dict: {
@@ -129,7 +154,30 @@ def function_name(param1, param2):
             "data": [...],
             "message": str
         }
+
+    Raises:
+        frappe.ValidationError: When validation fails
+        frappe.PermissionError: When user lacks permission
     """
+```
+
+**For class methods:**
+```python
+class MyController(Document):
+    """
+    Brief class description.
+
+    Attributes:
+        custom_field (str): Description
+    """
+
+    def validate(self) -> None:
+        """
+        Validate document before save.
+
+        Raises:
+            frappe.ValidationError: When validation fails
+        """
 ```
 
 ### Standard Error Handling Pattern

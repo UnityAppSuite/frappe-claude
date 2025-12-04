@@ -46,13 +46,74 @@ User wants to create Customer Feedback DocType:
 
 Follow these patterns consistently for all DocType and controller generation:
 
+### Import Order Convention (STRICTLY ENFORCED)
+
+**All imports MUST be at the top of the file, in this exact order:**
+
+```python
+# 1. Standard library imports (alphabetically sorted)
+import json
+from typing import Any, Dict, List, Optional
+
+# 2. Frappe framework imports
+import frappe
+from frappe import _
+from frappe.model.document import Document
+from frappe.utils import cint, flt, getdate, now, nowdate
+
+# 3. Third-party imports (if any)
+
+# 4. Local/custom module imports
+from myapp.utils import helper_function
+```
+
+**NEVER:**
+- Import inside functions
+- Mix import orders
+- Use `from module import *`
+
+### Docstring Requirements (MANDATORY)
+
+**Every function and class MUST have a docstring:**
+
+```python
+class MyDocType(Document):
+    """
+    Brief description of the DocType.
+
+    Attributes:
+        custom_field (str): Description of field
+    """
+
+    def validate(self) -> None:
+        """
+        Validate document before save.
+
+        Raises:
+            frappe.ValidationError: When validation fails
+        """
+
+    def calculate_totals(self) -> float:
+        """
+        Calculate and return total amount.
+
+        Returns:
+            float: The calculated total amount
+        """
+```
+
 ### Controller Inheritance Pattern (for extending existing DocTypes)
 ```python
 # myapp/overrides/student.py
+# 1. Standard library imports
+from typing import Any, Dict, Optional
+
+# 2. Frappe imports
 import frappe
-from education.education.doctype.student.student import Student
 from frappe.utils import getdate
-from typing import Dict, Any, Optional
+
+# 3. Local imports
+from education.education.doctype.student.student import Student
 
 
 class CustomStudent(Student):

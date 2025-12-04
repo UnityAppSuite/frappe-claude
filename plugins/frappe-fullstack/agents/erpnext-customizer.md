@@ -22,28 +22,132 @@ All generated customization code should be saved to a feature folder. This keeps
 
 3. **Create subfolder structure if needed:**
    ```bash
-   mkdir -p <feature>/backend/overrides
-   mkdir -p <feature>/fixtures
+   mkdir -p <feature>/backend/{overrides,setup}
    mkdir -p <feature>/frontend/form
    ```
 
 ### File Locations
 - Override classes: `<feature>/backend/overrides/<doctype>.py`
-- Custom fields fixtures: `<feature>/fixtures/custom_fields.json`
+- Custom fields setup: `<feature>/backend/setup/custom_fields.py`
 - Hooks additions: `<feature>/backend/hooks_additions.py`
 - Client scripts: `<feature>/frontend/form/<doctype>.js`
+
+**Note:** Do NOT create `<feature>/fixtures/` by default. Only use fixtures if user explicitly requests.
 
 ### Example
 User wants to customize Sales Invoice:
 1. Check/create: `./features/sales-invoice-customization/`
 2. Save override to: `./features/sales-invoice-customization/backend/overrides/sales_invoice.py`
-3. Save fixtures to: `./features/sales-invoice-customization/fixtures/custom_fields.json`
+3. Save custom fields to: `./features/sales-invoice-customization/backend/setup/custom_fields.py`
 4. Document hooks.py additions in: `./features/sales-invoice-customization/backend/hooks_additions.py`
 
 ### Note on hooks.py
 - Do NOT modify the main hooks.py directly
 - Create a `hooks_additions.py` file documenting what needs to be added
 - User will manually merge into main hooks.py after review
+
+---
+
+## CUSTOM FIELDS METHOD SELECTION
+
+Before creating custom fields, check which method the project already uses.
+
+### Step 1: Check for Existing Methods
+
+**Check in this order:**
+```bash
+# Check for custom.json
+find . -name "custom.json" -o -name "*custom*.json"
+
+# Check hooks.py for after_migrate
+grep -r "after_migrate" hooks.py
+
+# Check for setup.py or install.py
+find . -name "setup.py" -o -name "install.py"
+```
+
+### Step 2: Ask User for Preference
+
+**If `custom.json` exists:**
+- Ask: "I found `custom.json` at [path]. Should I add custom fields there?"
+
+**If `after_migrate` exists:**
+- Ask: "I found existing `after_migrate` hook. Should I add custom fields there?"
+
+**If no existing method found, ask:**
+- "How would you like to create custom fields?"
+  1. **after_migrate script** (Recommended) - Runs on every migration
+  2. **install.py** - Runs only on app install
+  3. **Fixtures** - Export/import JSON files (only if you need this)
+
+### Step 3: Implement Based on Selection
+
+**Option 1: after_migrate (RECOMMENDED)**
+```python
+# hooks.py
+after_migrate = ["myapp.setup.after_migrate"]
+
+# myapp/setup.py
+import frappe
+from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+
+
+def after_migrate():
+    """
+    Create or update custom fields after migration.
+
+    This ensures custom fields are always present and up-to-date
+    across all environments after running bench migrate.
+    """
+    create_custom_fields(get_custom_fields())
+
+
+def get_custom_fields():
+    """
+    Return dictionary of custom fields to create.
+
+    Returns:
+        dict: DocType name mapped to list of field definitions
+    """
+    return {
+        "Sales Invoice": [
+            {
+                "fieldname": "custom_reference",
+                "label": "Custom Reference",
+                "fieldtype": "Data",
+                "insert_after": "naming_series",
+            },
+            {
+                "fieldname": "custom_section",
+                "label": "Custom Section",
+                "fieldtype": "Section Break",
+                "insert_after": "customer",
+            }
+        ],
+        "Sales Invoice Item": [
+            {
+                "fieldname": "custom_cost_center",
+                "label": "Cost Center",
+                "fieldtype": "Link",
+                "options": "Cost Center",
+                "insert_after": "income_account",
+            }
+        ]
+    }
+```
+
+**Option 2: custom.json (if project already uses this)**
+- Add fields to existing `custom.json` file
+- Follow existing file structure and conventions
+
+**Option 3: Fixtures (ONLY if user explicitly requests)**
+```python
+# hooks.py
+fixtures = [
+    {"dt": "Custom Field", "filters": [["module", "=", "My App"]]}
+]
+```
+Then export with: `bench --site <site> export-fixtures --app my_app`
 
 ---
 
@@ -211,28 +315,38 @@ def on_cancel(doc, method):
 
 ## Custom Fields
 
-### Via Custom App (Recommended)
+**NOTE:** See "CUSTOM FIELDS METHOD SELECTION" section above for decision flow.
 
-In your app's `hooks.py`:
-```python
-fixtures = [
-    {
-        "dt": "Custom Field",
-        "filters": [["module", "=", "My App"]]
-    }
-]
-```
+### Via after_migrate (RECOMMENDED)
 
-Create custom fields programmatically:
+This ensures custom fields are always present after running `bench migrate`:
+
 ```python
-# In my_app/install.py
+# hooks.py
+after_migrate = ["myapp.setup.after_migrate"]
+
+# myapp/setup.py
 import frappe
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 
-def after_install():
-    """Create custom fields after app installation."""
-    custom_fields = {
+def after_migrate():
+    """
+    Create or update custom fields after migration.
+
+    This ensures custom fields are always present and up-to-date.
+    """
+    create_custom_fields(get_custom_fields())
+
+
+def get_custom_fields():
+    """
+    Return dictionary of custom fields to create.
+
+    Returns:
+        dict: DocType name mapped to list of field definitions
+    """
+    return {
         "Sales Invoice": [
             {
                 "fieldname": "custom_reference",
@@ -265,10 +379,20 @@ def after_install():
             }
         ]
     }
-    create_custom_fields(custom_fields)
 ```
 
-### Export as Fixtures
+### Via Fixtures (Only if explicitly requested)
+
+**Only use fixtures if user specifically asks for this approach:**
+
+```python
+# hooks.py
+fixtures = [
+    {"dt": "Custom Field", "filters": [["module", "=", "My App"]]}
+]
+```
+
+Export with:
 ```bash
 bench --site <site> export-fixtures --app my_app
 ```
