@@ -1,6 +1,6 @@
 ---
 description: Create a comprehensive implementation plan for Frappe/ERPNext features with technical design, task breakdown, and documentation. Saves plan to a markdown file.
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, TodoWrite, AskUserQuestion
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, TodoWrite, AskUserQuestion, EnterPlanMode, ExitPlanMode
 argument-hint: <feature_description>
 ---
 
@@ -12,30 +12,50 @@ Create a comprehensive implementation plan for a Frappe/ERPNext feature or modul
 
 $ARGUMENTS
 
+## IMPORTANT: Use Claude's Plan Mode
+
+This command should use Claude's built-in plan mode for comprehensive planning:
+
+1. **Enter Plan Mode** - Use `EnterPlanMode` tool to enter planning mode
+2. **Explore & Design** - Use Glob, Grep, Read to analyze codebase
+3. **Ask Questions** - Use AskUserQuestion for clarifications
+4. **Write Plan** - Save to feature folder using Write tool
+5. **Exit Plan Mode** - Use `ExitPlanMode` for user approval
+
 ## Process
 
-### Step 1: Determine Plan Location
+### Step 1: Enter Plan Mode
+
+First, use the `EnterPlanMode` tool to enter Claude's planning mode. This signals to the user that you're in a planning phase and will present a plan for approval.
+
+### Step 2: Determine Plan Location
 
 Ask the user where to save the plan:
 
 ```
 Use AskUserQuestion to ask:
-"Where should I save the implementation plan?"
+"Where should I create the feature folder for this plan?"
 
 Options:
-1. Current directory (./PLAN.md)
-2. docs/ folder (./docs/PLAN-<feature>.md)
-3. .claude/ folder (./.claude/plans/<feature>.md)
-4. Custom location (let me specify)
+1. ./features/<feature-name>/
+2. ./docs/features/<feature-name>/
+3. Custom location (let me specify)
 ```
 
 If user selects custom, ask for the path.
 
-**Default filename format**: `PLAN-<feature-name>.md`
-- Convert feature name to kebab-case
-- Example: "Customer Feedback System" → `PLAN-customer-feedback-system.md`
+**Feature folder structure**:
+```
+<path>/<feature-name>/
+├── plan/
+│   └── PLAN.md          # The implementation plan
+├── backend/
+├── frontend/
+├── doctype/
+└── tests/
+```
 
-### Step 2: Invoke Planner Agent
+### Step 3: Invoke Planner Agent
 
 Use the Task tool to spawn the `frappe-fullstack:frappe-planner` agent:
 
@@ -373,34 +393,42 @@ sudo supervisorctl restart all
 
 ### Step 6: Save the Plan
 
-Write the plan to the user-specified location:
+Write the plan to the feature folder:
 
 ```python
 # Use Write tool to save
-file_path = user_specified_path or "./PLAN-{feature-name}.md"
+file_path = "<feature-folder>/plan/PLAN.md"
 ```
 
-### Step 7: Summary
+### Step 7: Exit Plan Mode
 
-After saving, provide:
+**IMPORTANT:** After writing the plan file, use `ExitPlanMode` tool to:
+1. Signal that planning is complete
+2. Present the plan to user for approval
+3. User will review and approve before implementation begins
+
+### Step 8: Summary
+
+After user approves the plan, provide:
 
 1. **Plan Location**: Where the file was saved
 2. **Quick Summary**: Key decisions and structure
 3. **Next Steps**: How to start implementation
 4. **Commands to Use**:
    ```
-   /frappe-doctype-create [DocType] [module]
-   /frappe-backend [task]
-   /frappe-frontend [task]
+   /frappe-fullstack:frappe-doctype-create [DocType] [module]
+   /frappe-fullstack:frappe-backend [task]
+   /frappe-fullstack:frappe-frontend [task]
    ```
 
 ## Output
 
 The command produces:
 
-1. **Saved Plan File**: Comprehensive markdown document
-2. **Console Summary**:
-   - Plan saved to: `<path>`
+1. **Saved Plan File**: Comprehensive markdown document in feature folder
+2. **User Approval**: Plan mode ensures user reviews and approves
+3. **Console Summary**:
+   - Plan saved to: `<feature-folder>/plan/PLAN.md`
    - Key components identified
    - Implementation phases overview
    - Suggested next commands
@@ -408,6 +436,7 @@ The command produces:
 ## Tips
 
 - Use `/frappe-plan` before starting any significant feature
+- Plan mode ensures user reviews before implementation
 - Review and refine the plan with stakeholders
 - Update the plan as requirements evolve
 - Reference the plan during implementation with `/frappe-fullstack`
