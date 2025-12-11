@@ -36,13 +36,21 @@ First, understand the scope:
 
 ### Phase 2: Parallel Agent Invocation
 
-Launch agents in parallel using multiple Task tool calls in a single message:
+Launch agents in parallel using multiple Task tool calls in a single message.
+
+**IMPORTANT:** Agent names MUST be fully qualified with plugin prefix:
+- `frappe-fullstack:doctype-architect`
+- `frappe-fullstack:frappe-backend`
+- `frappe-fullstack:frappe-frontend`
+- `frappe-fullstack:erpnext-customizer`
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    PARALLEL EXECUTION                        │
 ├─────────────────┬─────────────────┬─────────────────────────┤
-│ doctype-architect│ frappe-backend  │ frappe-frontend         │
+│ frappe-fullstack│ frappe-fullstack│ frappe-fullstack:       │
+│ :doctype-       │ :frappe-backend │ frappe-frontend         │
+│ architect       │                 │                         │
 │                 │                 │                         │
 │ • Design schema │ • Controllers   │ • Form scripts          │
 │ • Field types   │ • APIs          │ • Dialogs               │
@@ -118,10 +126,10 @@ After parallel agents complete:
    - Ensure API names match between frontend/backend
 
 2. **Add ERPNext Integration** (if needed)
-   Spawn erpnext-customizer agent for:
+   Spawn `frappe-fullstack:erpnext-customizer` agent for:
    - Custom fields on stock DocTypes
    - Hooks configuration
-   - Fixtures for deployment
+   - after_migrate setup (preferred over fixtures)
 
 3. **Create Files**
    Write all files to appropriate locations:

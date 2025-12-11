@@ -8,7 +8,11 @@ You are helping the user with Git and GitHub operations for their Frappe/ERPNext
 
 ## Task: $ARGUMENTS
 
-Use the `github-workflow` agent to handle this request. The agent will:
+Use the `frappe-fullstack:github-workflow` agent to handle this request.
+
+**IMPORTANT:** The agent name MUST be fully qualified: `frappe-fullstack:github-workflow`
+
+The agent will:
 
 1. **For branch creation**: Ask for task ID and description, create branch from default branch
 2. **For commits**: Stage changes and commit WITHOUT co-author or generated footers
@@ -50,4 +54,4 @@ Format: `{task-id}-{short-description}`
 /frappe-github I need to create a branch, commit my changes, and create a PR
 ```
 
-Invoke the github-workflow agent to handle the user's request. Ask for task ID and description if creating a branch. Follow all team conventions for commits and PRs.
+Invoke the `frappe-fullstack:github-workflow` agent to handle the user's request. Ask for task ID and description if creating a branch. Follow all team conventions for commits and PRs.

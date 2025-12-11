@@ -14,7 +14,9 @@ $ARGUMENTS
 
 ## Agent Invocation
 
-Use the Task tool to spawn the `frappe-frontend` agent with the following configuration:
+Use the Task tool to spawn the `frappe-fullstack:frappe-frontend` agent with the following configuration:
+
+**IMPORTANT:** The agent name MUST be fully qualified: `frappe-fullstack:frappe-frontend`
 
 ### Agent Prompt Template
 

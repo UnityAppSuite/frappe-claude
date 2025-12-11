@@ -14,7 +14,9 @@ $ARGUMENTS
 
 ## Agent Invocation
 
-Use the Task tool to spawn the `frappe-debugger` agent with the following configuration:
+Use the Task tool to spawn the `frappe-fullstack:frappe-debugger` agent with the following configuration:
+
+**IMPORTANT:** The agent name MUST be fully qualified: `frappe-fullstack:frappe-debugger`
 
 ### Agent Prompt Template
 

@@ -37,7 +37,9 @@ If user selects custom, ask for the path.
 
 ### Step 2: Invoke Planner Agent
 
-Use the Task tool to spawn the `frappe-planner` agent:
+Use the Task tool to spawn the `frappe-fullstack:frappe-planner` agent:
+
+**IMPORTANT:** The agent name MUST be fully qualified: `frappe-fullstack:frappe-planner`
 
 ```
 ## Planning Task
