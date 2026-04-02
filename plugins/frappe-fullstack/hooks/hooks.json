@@ -6,13 +6,15 @@
         "hooks": [
           {
             "type": "command",
+            "if": "git commit",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/strip-coauthor.sh",
             "timeout": 5
           },
           {
-            "type": "prompt",
-            "prompt": "The assistant is about to run a bash command. If the command contains 'bench drop-site', 'bench destroy-all-sessions', 'bench reinstall', 'rm -rf', or 'bench --force', respond 'no' to block the command as it is destructive. Otherwise respond 'yes'.",
-            "timeout": 10
+            "type": "command",
+            "if": "bench drop-site|bench destroy-all-sessions|bench reinstall|rm -rf|bench --force",
+            "command": "echo '{\"hookSpecificOutput\":{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Destructive command blocked by frappe-fullstack plugin. Use with caution — run manually if intended.\"}}'",
+            "timeout": 3
           }
         ]
       }
