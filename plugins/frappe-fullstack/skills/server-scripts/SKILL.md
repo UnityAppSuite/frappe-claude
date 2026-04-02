@@ -1,6 +1,7 @@
 ---
 name: server-scripts
 description: Frappe server-side Python patterns for controllers, document events, whitelisted APIs, background jobs, and database operations. Use when writing controller logic, creating APIs, handling document events, or processing data on the server.
+user-invocable: false
 ---
 
 # Frappe Server Scripts Reference

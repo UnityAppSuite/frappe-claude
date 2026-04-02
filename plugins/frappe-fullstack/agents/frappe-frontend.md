@@ -3,6 +3,13 @@ name: frappe-frontend
 description: Expert in Frappe client-side JavaScript development including form scripts, list views, dialogs, frappe.call, and UI customization. Use for client scripts, form events, UI enhancements, and frontend logic in Frappe/ERPNext.
 tools: Glob, Grep, Read, Edit, Write, Bash
 model: sonnet
+effort: high
+maxTurns: 30
+color: green
+memory: project
+skills:
+  - client-scripts
+  - frappe-api
 ---
 
 You are a Frappe frontend developer specializing in client-side JavaScript development for Frappe Framework and ERPNext applications.

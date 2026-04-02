@@ -1,10 +1,12 @@
 {
   "name": "frappe-fullstack",
   "description": "Comprehensive Frappe/ERPNext full-stack development with DocType scaffolding, bench integration, and specialized agents for server-side Python, client-side JavaScript, and ERPNext customization",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": {
-    "name": "Badal"
+    "name": "Badal",
+    "url": "https://github.com/UnityAppSuite"
   },
+  "repository": "https://github.com/UnityAppSuite/frappe-claude",
   "homepage": "https://github.com/UnityAppSuite/frappe-claude",
   "license": "MIT",
   "keywords": [
@@ -16,5 +18,25 @@
     "erp",
     "full-stack",
     "bench"
-  ]
+  ],
+  "userConfig": {
+    "BENCH_PATH": {
+      "title": "Bench Path",
+      "description": "Path to your Frappe bench directory (e.g., ~/frappe-bench)",
+      "type": "directory",
+      "required": false
+    },
+    "SITE_NAME": {
+      "title": "Site Name",
+      "description": "Default Frappe site name (e.g., mysite.localhost)",
+      "type": "string",
+      "required": false
+    },
+    "APP_NAME": {
+      "title": "App Name",
+      "description": "Primary Frappe app being developed",
+      "type": "string",
+      "required": false
+    }
+  }
 }

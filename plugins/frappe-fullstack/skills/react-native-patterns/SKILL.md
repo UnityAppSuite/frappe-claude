@@ -1,6 +1,7 @@
 ---
 name: react-native-patterns
 description: React Native / Expo patterns for Frappe-backed mobile apps. Reference for Axios API calls, React Query v4, Redux Toolkit, React Navigation, expo-location, NetworkContext, transport journey lifecycle, attendance flow, and EAS builds.
+user-invocable: false
 ---
 
 # React Native Patterns for Frappe Mobile Apps

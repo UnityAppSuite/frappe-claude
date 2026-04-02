@@ -1,6 +1,7 @@
 ---
 name: bench-commands
 description: Frappe Bench CLI command reference for site management, app management, development, and production operations. Use when running bench commands, managing sites, migrations, builds, or deployments.
+user-invocable: false
 ---
 
 # Bench CLI Commands Reference

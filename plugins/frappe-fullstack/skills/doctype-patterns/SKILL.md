@@ -1,6 +1,7 @@
 ---
 name: doctype-patterns
 description: Frappe DocType creation patterns, field types, controller hooks, and data modeling best practices. Use when creating DocTypes, designing data models, adding fields, or setting up document relationships in Frappe/ERPNext.
+user-invocable: false
 ---
 
 # Frappe DocType Patterns

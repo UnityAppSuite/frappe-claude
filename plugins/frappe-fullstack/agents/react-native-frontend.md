@@ -2,6 +2,13 @@
 name: react-native-frontend
 description: Expert in React Native / Expo mobile app development for Frappe-backed driver and staff apps. Use for screens, navigation, transport journey lifecycle, GPS tracking, attendance marking, Redux state, React Query v4 hooks, camera, location, push notifications, network awareness, and Expo/EAS builds.
 tools: Glob, Grep, Read, Edit, Write, Bash
+model: sonnet
+effort: high
+maxTurns: 30
+color: pink
+memory: project
+skills:
+  - react-native-patterns
 ---
 
 # React Native Frontend Agent

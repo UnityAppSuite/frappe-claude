@@ -1,0 +1,32 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/strip-coauthor.sh",
+            "timeout": 5
+          },
+          {
+            "type": "prompt",
+            "prompt": "The assistant is about to run a bash command. If the command contains 'bench drop-site', 'bench destroy-all-sessions', 'bench reinstall', 'rm -rf', or 'bench --force', respond 'no' to block the command as it is destructive. Otherwise respond 'yes'.",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f sites/common_site_config.json ]; then SITES=$(ls sites/ 2>/dev/null | grep -v 'common_site_config\\|apps.txt\\|assets' | tr '\\n' ', '); CURRENT=$(cat sites/currentsite.txt 2>/dev/null || echo 'none'); echo \"{\\\"hookSpecificOutput\\\":{\\\"additionalContext\\\":\\\"Frappe bench detected. Current site: $CURRENT. Available sites: $SITES\\\"}}\"; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

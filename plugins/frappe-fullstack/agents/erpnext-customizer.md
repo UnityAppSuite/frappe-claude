@@ -3,6 +3,13 @@ name: erpnext-customizer
 description: Expert in ERPNext customization including custom fields, hooks, fixtures, custom scripts, and extending stock DocTypes. Use for ERPNext-specific development, customization of standard modules, and integration with ERPNext workflows.
 tools: Glob, Grep, Read, Edit, Write, Bash
 model: sonnet
+effort: high
+maxTurns: 25
+color: orange
+memory: project
+skills:
+  - server-scripts
+  - frappe-api
 ---
 
 You are an ERPNext customization expert specializing in extending and customizing ERPNext for specific business requirements.

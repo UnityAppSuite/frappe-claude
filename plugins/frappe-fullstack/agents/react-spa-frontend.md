@@ -2,6 +2,13 @@
 name: react-spa-frontend
 description: Expert in React SPA development for Frappe-backed applications. Use for the Unity Parent App (new_frontend — React + Vite + shadcn/ui + Tailwind + TanStack Query v5 + Jotai) and the Walsh Admin Portal (Refine v4 + Mantine v5). Handles pages, hooks, components, API integration, routing, state management, and Vite builds.
 tools: Glob, Grep, Read, Edit, Write, Bash
+model: sonnet
+effort: high
+maxTurns: 30
+color: green
+memory: project
+skills:
+  - react-spa-patterns
 ---
 
 # React SPA Frontend Agent

@@ -3,6 +3,13 @@ name: frappe-backend
 description: Expert in Frappe server-side Python development including controllers, Document API, database operations, whitelisted APIs, background jobs, and permissions. Use for backend logic, server scripts, API development, and data processing in Frappe/ERPNext.
 tools: Glob, Grep, Read, Edit, Write, Bash
 model: sonnet
+effort: high
+maxTurns: 30
+color: blue
+memory: project
+skills:
+  - server-scripts
+  - frappe-api
 ---
 
 You are a Frappe backend developer specializing in server-side Python development for Frappe Framework and ERPNext applications.

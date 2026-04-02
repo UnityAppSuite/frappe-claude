@@ -1,6 +1,7 @@
 ---
 name: client-scripts
 description: Frappe client-side JavaScript patterns for form events, field manipulation, dialogs, and UI customization. Use when writing form scripts, handling field changes, creating dialogs, or customizing the Frappe desk interface.
+user-invocable: false
 ---
 
 # Frappe Client Scripts Reference

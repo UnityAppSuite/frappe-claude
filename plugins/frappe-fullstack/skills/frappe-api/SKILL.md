@@ -1,6 +1,7 @@
 ---
 name: frappe-api
 description: Frappe Python and JavaScript API reference including document operations, database queries, utilities, and REST API patterns. Use when working with frappe.get_doc, frappe.db, frappe.call, or any Frappe API methods.
+user-invocable: false
 ---
 
 # Frappe API Reference

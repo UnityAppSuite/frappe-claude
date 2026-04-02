@@ -1,6 +1,7 @@
 ---
 name: react-spa-patterns
 description: React SPA patterns for Frappe-backed applications. Reference for TanStack Query, Axios, Jotai, shadcn/ui, Tailwind, Refine v4, Mantine v5, React Router, Vite config, and Frappe API integration in the Unity Parent App and Walsh Admin Portal.
+user-invocable: false
 ---
 
 # React SPA Patterns for Frappe
