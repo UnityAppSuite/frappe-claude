@@ -1,6 +1,6 @@
 ---
 description: Create a new Frappe application with complete scaffolding including modules, hooks, and initial structure
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, TodoWrite
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, TaskCreate, TaskUpdate
 argument-hint: <app_name> [--title <title>] [--module <module_name>]
 ---
 

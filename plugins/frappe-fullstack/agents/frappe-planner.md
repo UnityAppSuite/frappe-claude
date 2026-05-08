@@ -1,7 +1,7 @@
 ---
 name: frappe-planner
 description: Strategic planner for Frappe/ERPNext projects that analyzes requirements, designs architecture, creates implementation plans, and documents technical specifications. Use for planning new features, modules, or complex customizations before implementation.
-tools: Glob, Grep, Read, Write, Edit, Bash, AskUserQuestion, TodoWrite, EnterPlanMode, ExitPlanMode
+tools: Glob, Grep, Read, Write, Edit, Bash, AskUserQuestion, TaskCreate, TaskUpdate, EnterPlanMode, ExitPlanMode
 model: sonnet
 ---
 

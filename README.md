@@ -1,12 +1,12 @@
-# Frappe Claude - Plugin Marketplace
+# Frappe Claude — Plugin Marketplace
 
-A Claude Code plugin marketplace for Frappe Framework and ERPNext development. This repository contains multiple plugins optimized for Frappe/ERPNext workflows.
+A Claude Code plugin marketplace for Frappe Framework and ERPNext development. This repository contains one or more plugins optimized for Frappe/ERPNext workflows.
 
 ## Available Plugins
 
 | Plugin | Description |
 |--------|-------------|
-| [frappe-fullstack](./plugins/frappe-fullstack) | Comprehensive full-stack development with DocType scaffolding, bench integration, and specialized agents |
+| [frappe-fullstack](./plugins/frappe-fullstack) | Comprehensive full-stack development with DocType scaffolding, bench integration, hooks, a bench-error-log monitor, and specialized agents for backend, classic frontend, React SPA, React Native, ERPNext customization, debugging, planning, and Git workflows |
 
 ## Installation
 
@@ -14,29 +14,31 @@ A Claude Code plugin marketplace for Frappe Framework and ERPNext development. T
 # Clone this marketplace
 git clone https://github.com/UnityAppSuite/frappe-claude.git
 
-# Add the marketplace to Claude Code
+# Add the marketplace (inside Claude Code)
 /plugin marketplace add ./frappe-claude
 
-# List available plugins
-/plugin search frappe
-
-# Install a plugin
-/plugin install frappe-fullstack
+# Install the plugin
+/plugin install frappe-fullstack@frappe-claude
 ```
+
+On first install you will be prompted for `bench_path`, `default_site`, and (optionally) `python_path`. These values are reused by the plugin's hooks and the bench-error-log monitor.
 
 ## Marketplace Structure
 
 ```
 frappe-claude/
 ├── .claude-plugin/
-│   └── marketplace.json     # Marketplace manifest
+│   └── marketplace.json          # Marketplace manifest
 ├── plugins/
-│   └── frappe-fullstack/    # Full-stack Frappe plugin
+│   └── frappe-fullstack/         # Full-stack Frappe plugin
 │       ├── .claude-plugin/
 │       │   └── plugin.json
-│       ├── agents/          # Specialized AI agents
-│       ├── commands/        # Slash commands
-│       └── skills/          # Auto-invoked skills
+│       ├── agents/               # 10 specialized agents
+│       ├── commands/             # 8 user-typed slash commands
+│       ├── skills/               # 8 model-invoked skills
+│       ├── hooks/hooks.json      # SessionStart + PostToolUse
+│       ├── monitors/monitors.json# Background bench-error-log tail
+│       └── scripts/              # Hook scripts
 └── README.md
 ```
 
@@ -46,11 +48,13 @@ frappe-claude/
 
 A comprehensive plugin for Frappe/ERPNext development featuring:
 
-- **7 Specialized Agents**: doctype-architect, frappe-backend, frappe-frontend, erpnext-customizer, frappe-debugger, frappe-planner, github-workflow
-- **12 Slash Commands**: For DocType creation, backend/frontend development, debugging, Git workflows, and more
-- **5 Skills**: Auto-invoked knowledge for Frappe patterns, APIs, and best practices
+- **10 Agents** — `doctype-architect`, `frappe-backend`, `frappe-frontend`, `frappe-custom-frontend`, `react-spa-frontend`, `react-native-frontend`, `erpnext-customizer`, `frappe-debugger`, `frappe-planner`, `github-workflow`
+- **8 Slash Commands** — `/frappe-fullstack` (multi-agent orchestrator), `/frappe-plan`, `/frappe-doctype-create`, `/frappe-doctype-field`, `/frappe-app`, `/frappe-bench`, `/frappe-test`, `/frappe-github`
+- **8 Skills** — `bench-commands`, `client-scripts`, `doctype-patterns`, `frappe-api`, `react-native-patterns`, `react-spa-patterns`, `server-scripts`, `frappe-debug`
+- **Hooks** — auto-format Python files inside the bench on save; remind to `bench migrate` after DocType JSON or `hooks.py` edits; inject bench/site context at session start
+- **Monitor** — tails `web.error.log` and `worker.error.log` whenever the `frappe-debug` skill is invoked, so the debugger agent sees errors live
 
-#### Git Workflow Features
+#### Git Workflow Conventions
 - Branch naming: `{type}/{task-id}-{description}` (e.g., `feature/123-payment-api`)
 - Clean commits without co-author or generated footers
 - PR creation with proper formatting
@@ -59,28 +63,33 @@ A comprehensive plugin for Frappe/ERPNext development featuring:
 
 ## Adding New Plugins
 
-To add a new plugin to this marketplace:
+Per the [current plugin spec](https://code.claude.com/docs/en/plugins-reference#plugin-directory-structure), `skills/` (with `<name>/SKILL.md`) is preferred over `commands/` for new component-style plugins; `commands/` is reserved for user-typed entry points.
 
-1. Create a new directory under `plugins/`
-2. Add the required plugin structure:
+1. Create a directory under `plugins/`:
    ```
    plugins/my-plugin/
    ├── .claude-plugin/
-   │   └── plugin.json
-   ├── commands/
-   ├── agents/
-   └── skills/
+   │   └── plugin.json     # Manifest (name required, version optional)
+   ├── skills/             # Model-invoked SKILL.md folders
+   ├── commands/           # User-typed slash commands (.md)
+   ├── agents/             # Subagent definitions (.md with frontmatter)
+   ├── hooks/hooks.json    # Optional event handlers
+   └── monitors/monitors.json  # Optional background watchers
    ```
-3. Update `marketplace.json` to include the new plugin
-4. Submit a pull request
+2. Add an entry to `.claude-plugin/marketplace.json`.
+3. Validate with `claude plugin validate .`.
+4. Submit a pull request.
+
+Omit `version` from `plugin.json` if you want every commit to ship to users automatically (uses git SHA). Pin a `version` only if you intend to bump it on every release.
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Add or modify plugins
-4. Test with Claude Code
-5. Submit a pull request
+4. Run `claude plugin validate .`
+5. Test with `claude --plugin-dir ./plugins/<your-plugin>`
+6. Submit a pull request
 
 ## License
 
@@ -91,3 +100,5 @@ MIT License
 - [Frappe Framework Documentation](https://frappeframework.com/docs)
 - [ERPNext Documentation](https://docs.erpnext.com)
 - [Claude Code Plugin Documentation](https://code.claude.com/docs/en/plugins)
+- [Plugin Marketplace Reference](https://code.claude.com/docs/en/plugin-marketplaces)
+- [Plugin Reference](https://code.claude.com/docs/en/plugins-reference)

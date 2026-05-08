@@ -1,6 +1,6 @@
 ---
 description: Create a new Frappe DocType with complete scaffolding including JSON definition, Python controller, JavaScript client script, and tests
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, TodoWrite
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, TaskCreate, TaskUpdate
 argument-hint: <doctype_name> [module_name] [--child] [--single] [--submittable]
 ---
 

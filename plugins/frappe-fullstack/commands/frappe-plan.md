@@ -1,6 +1,6 @@
 ---
 description: Create a comprehensive implementation plan for Frappe/ERPNext features with technical design, task breakdown, and documentation. Saves plan to a markdown file.
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, TodoWrite, AskUserQuestion, EnterPlanMode, ExitPlanMode
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent, TaskCreate, AskUserQuestion, EnterPlanMode, ExitPlanMode
 argument-hint: <feature_description>
 ---
 
@@ -57,7 +57,7 @@ If user selects custom, ask for the path.
 
 ### Step 3: Invoke Planner Agent
 
-Use the Task tool to spawn the `frappe-fullstack:frappe-planner` agent:
+Use the Agent tool to spawn the `frappe-fullstack:frappe-planner` agent:
 
 **IMPORTANT:** The agent name MUST be fully qualified: `frappe-fullstack:frappe-planner`
 

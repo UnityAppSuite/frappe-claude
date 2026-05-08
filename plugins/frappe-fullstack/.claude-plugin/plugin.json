@@ -1,11 +1,12 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "frappe-fullstack",
   "description": "Comprehensive Frappe/ERPNext full-stack development with DocType scaffolding, bench integration, and specialized agents for server-side Python, client-side JavaScript, and ERPNext customization",
-  "version": "1.0.0",
   "author": {
     "name": "Badal"
   },
   "homepage": "https://github.com/UnityAppSuite/frappe-claude",
+  "repository": "https://github.com/UnityAppSuite/frappe-claude",
   "license": "MIT",
   "keywords": [
     "frappe",
@@ -16,5 +17,24 @@
     "erp",
     "full-stack",
     "bench"
-  ]
+  ],
+  "userConfig": {
+    "bench_path": {
+      "type": "directory",
+      "title": "Bench root",
+      "description": "Absolute path to your frappe-bench directory (the one containing apps/, sites/, env/).",
+      "required": true
+    },
+    "default_site": {
+      "type": "string",
+      "title": "Default site",
+      "description": "Default site name for bench commands (e.g. dev.localhost). Override per-command with --site.",
+      "required": true
+    },
+    "python_path": {
+      "type": "file",
+      "title": "Python interpreter",
+      "description": "Optional. Path to bench's Python (usually <bench_path>/env/bin/python). Leave blank to detect."
+    }
+  }
 }

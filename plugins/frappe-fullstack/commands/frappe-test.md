@@ -1,7 +1,7 @@
 ---
 description: Run Frappe tests with various options including specific DocTypes, modules, apps, and coverage reporting
 allowed-tools: Bash, Read, Grep, Glob
-argument-hint: [app_name] [--doctype <name>] [--module <name>] [--coverage]
+argument-hint: "[app_name] [--doctype <name>] [--module <name>] [--coverage]"
 ---
 
 # Run Frappe Tests

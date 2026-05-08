@@ -1,6 +1,6 @@
 ---
 description: Invoke multiple Frappe agents in parallel for full-stack development - coordinates backend, frontend, and architecture agents for complete feature implementation
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Task, TodoWrite, AskUserQuestion
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent, TaskCreate, AskUserQuestion
 argument-hint: <feature_description>
 ---
 
@@ -27,7 +27,7 @@ First, understand the scope:
    - Is ERPNext integration needed? (Customizations, hooks)
 
 2. **Create Todo List**
-   Use TodoWrite to track:
+   Use TaskCreate to track:
    - [ ] DocType/data model design
    - [ ] Backend implementation
    - [ ] Frontend implementation
@@ -36,7 +36,7 @@ First, understand the scope:
 
 ### Phase 2: Parallel Agent Invocation
 
-Launch agents in parallel using multiple Task tool calls in a single message.
+Launch agents in parallel using multiple Agent tool calls in a single message.
 
 **IMPORTANT:** Agent names MUST be fully qualified with plugin prefix:
 - `frappe-fullstack:doctype-architect`
@@ -218,8 +218,8 @@ After parallel agents complete:
 
 | Tool | Purpose |
 |------|---------|
-| Task | Spawn specialized agents |
-| TodoWrite | Track progress |
+| Agent | Spawn specialized agents |
+| TaskCreate | Track progress |
 | Glob | Find files |
 | Grep | Search code |
 | Read | Read existing code |

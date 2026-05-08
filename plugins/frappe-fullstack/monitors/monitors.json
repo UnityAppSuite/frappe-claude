@@ -1,0 +1,8 @@
+[
+  {
+    "name": "bench-error-log",
+    "command": "tail -F ${user_config.bench_path}/sites/${user_config.default_site}/logs/web.error.log ${user_config.bench_path}/sites/${user_config.default_site}/logs/worker.error.log 2>/dev/null",
+    "description": "Frappe bench error log (web + worker)",
+    "when": "on-skill-invoke:frappe-debug"
+  }
+]

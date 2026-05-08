@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "frappe-claude",
   "description": "Claude Code plugins for Frappe Framework and ERPNext development",
   "owner": {
@@ -8,7 +9,9 @@
     {
       "name": "frappe-fullstack",
       "source": "./plugins/frappe-fullstack",
-      "description": "Comprehensive Frappe/ERPNext full-stack development with DocType scaffolding, bench integration, and specialized agents"
+      "description": "Comprehensive Frappe/ERPNext full-stack development with DocType scaffolding, bench integration, and specialized agents",
+      "category": "frameworks",
+      "tags": ["frappe", "erpnext", "python", "javascript", "react", "doctype"]
     }
   ]
 }
