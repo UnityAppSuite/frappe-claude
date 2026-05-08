@@ -1,6 +1,6 @@
 # Frappe Full Stack Plugin for Claude Code
 
-A comprehensive Claude Code plugin for Frappe Framework and ERPNext full-stack development. Bundles 11 specialized agents, 8 user commands, 9 skills, plus hooks, a background bench-error-log monitor, and one-time userConfig prompts for `bench_path` and `default_site`.
+A comprehensive Claude Code plugin for Frappe Framework and ERPNext full-stack development. Bundles 11 specialized agents, 9 user commands, 13 skills, plus hooks, two background log monitors (error log + filtered access log), and one-time userConfig prompts for `bench_path` and `default_site`.
 
 ## Features
 
@@ -39,7 +39,7 @@ claude --plugin-dir ./plugins/frappe-fullstack
 
 ## Components
 
-### Slash commands (8)
+### Slash commands (9)
 
 | Command | Description |
 |---------|-------------|
@@ -50,6 +50,7 @@ claude --plugin-dir ./plugins/frappe-fullstack
 | `/frappe-app` | `bench new-app` workflow with module setup |
 | `/frappe-bench` | Safe wrapper for `bench` CLI commands |
 | `/frappe-test` | Run Frappe tests (per-app, per-DocType, per-module, with coverage) |
+| `/frappe-perf` | Read-only performance diagnostics — `bench doctor`, pending/stuck jobs, slow query log, N+1 search in working-tree diff, recent perf-related errors |
 | `/frappe-github` | Git/GitHub workflows — branch, commit, PR, with team conventions |
 
 > **Single-agent commands like `/frappe-backend`, `/react-spa`, `/frappe-debug` were removed.** Their agents (below) are still here and Claude routes to them automatically by description, or you can invoke them explicitly via `/agents`.
@@ -70,7 +71,7 @@ claude --plugin-dir ./plugins/frappe-fullstack
 | `frappe-planner` | Strategic planning with plan-mode support |
 | `github-workflow` | Branch / commit / PR conventions |
 
-### Skills (9)
+### Skills (13)
 
 | Skill | Triggers when |
 |-------|---------------|
@@ -78,11 +79,15 @@ claude --plugin-dir ./plugins/frappe-fullstack
 | `frappe-api` | Working with `frappe.get_doc`, `frappe.db`, `frappe.call`, REST endpoints |
 | `bench-commands` | Running `bench` CLI operations |
 | `client-scripts` | Form events, dialogs, list view customization |
-| `server-scripts` | Controllers, APIs, background jobs |
+| `server-scripts` | Controllers, APIs, background jobs (basic syntax) |
 | `react-spa-patterns` | React SPA work backed by Frappe |
 | `react-native-patterns` | React Native / Expo work backed by Frappe |
-| `frappe-debug` | Triaging an error or unexpected behavior — also starts the bench-error-log monitor |
+| `frappe-debug` | Triaging an error or unexpected behavior — also starts the bench log monitors |
 | `frappe-review` | "Review my changes" / pre-commit review or `github.com/*/pull/*` URL — gathers diff (local via `git` or remote via `gh pr diff`), runs `ruff`/`eslint`, loads domain reference rules, hands off to `frappe-reviewer` |
+| `workflow-patterns` | Designing a Frappe Workflow — multi-state document lifecycles, role-based transitions, state-scoped field permissions, transition handlers |
+| `print-format` | Designing or troubleshooting Print Formats / PDF output — Jinja templates, page breaks, multi-currency, letter heads, wkhtmltopdf vs Chromium |
+| `testing-patterns` | Writing `FrappeTestCase` tests — factories, fixture isolation, mocking `frappe.sendmail` / external HTTP, permission tests, anti-patterns |
+| `scheduler-and-jobs` | Production-grade background jobs — queue selection, idempotency, retries, distributed locks, monitoring stuck jobs, chunked long-running work (complements `server-scripts`) |
 
 ### Hooks (`hooks/hooks.json`)
 
@@ -93,16 +98,16 @@ claude --plugin-dir ./plugins/frappe-fullstack
 
 The post-edit hook silently no-ops when `ruff` or `jq` aren't installed, and always exits 0 so it never blocks Claude.
 
-### Monitor (`monitors/monitors.json`)
+### Monitors (`monitors/monitors.json`)
 
-A single background monitor:
+Two background monitors, both triggered `on-skill-invoke:frappe-debug` so they only run when actively debugging:
 
-```
-bench-error-log: tail -F sites/<default_site>/logs/web.error.log
-                          sites/<default_site>/logs/worker.error.log
-```
+| Monitor | What it watches |
+|---------|-----------------|
+| `bench-error-log` | `tail -F sites/<default_site>/logs/web.error.log` + `sites/<default_site>/logs/worker.error.log` — every error appears as a Claude notification |
+| `bench-access-log` | `tail -F sites/<default_site>/logs/web.log` filtered through `grep -E '(WARNING\|ERROR\| 4xx \| 5xx \|slow)'` — surfaces problem requests without drowning in 200 OKs |
 
-Trigger: `on-skill-invoke:frappe-debug` — only starts when the `frappe-debug` skill fires, so it doesn't add noise to ordinary sessions. Each new line in either log arrives as a notification to Claude.
+The grep filter on the access log keeps signal-to-noise high — successful responses don't reach Claude, only warnings, errors, 4xx/5xx status codes, and lines containing "slow".
 
 ## Usage examples
 
@@ -169,6 +174,14 @@ Switches to PR mode: uses `gh pr view` / `gh pr diff` (your existing `gh auth lo
 /frappe-test --doctype "Sales Invoice"
 ```
 
+### Performance diagnostics
+```
+/frappe-perf            # all checks: bench doctor, stuck jobs, slow queries, N+1 in diff, recent perf errors
+/frappe-perf --jobs     # only stuck-job check
+/frappe-perf --diff     # only N+1 candidates in working-tree diff
+```
+Read-only; never modifies settings or restarts services. The "enable slow query log" SQL is printed for you to run manually if you want to capture a slow log.
+
 ### Git workflow
 ```
 /frappe-github create branch    # prompts for type / task-id / description
@@ -183,15 +196,19 @@ frappe-fullstack/
 ├── .claude-plugin/
 │   └── plugin.json              # Manifest — no `version` (uses git SHA)
 ├── agents/                      # 11 .md files, all with frontmatter
-├── commands/                    # 8 .md files (user-typed entry points)
-├── skills/                      # 9 SKILL.md folders (model-invoked)
-│   └── frappe-review/
-│       ├── SKILL.md
-│       └── references/          # Progressive-disclosure rule files
-│           ├── security.md      # Always loaded
-│           ├── frappe-python.md # Loaded for *.py / hooks.py / Jinja
-│           ├── doctype-json.md  # Loaded for doctype/*.json
-│           └── frontend.md      # Loaded for *.{js,ts,tsx,vue}
+├── commands/                    # 9 .md files (user-typed entry points)
+├── skills/                      # 13 SKILL.md folders (model-invoked)
+│   ├── frappe-review/
+│   │   ├── SKILL.md
+│   │   └── references/          # Progressive-disclosure rule files
+│   │       ├── security.md      # Always loaded
+│   │       ├── frappe-python.md # Loaded for *.py / hooks.py / Jinja
+│   │       ├── doctype-json.md  # Loaded for doctype/*.json
+│   │       └── frontend.md      # Loaded for *.{js,ts,tsx,vue}
+│   ├── workflow-patterns/SKILL.md
+│   ├── print-format/SKILL.md
+│   ├── testing-patterns/SKILL.md
+│   └── scheduler-and-jobs/SKILL.md
 ├── hooks/
 │   └── hooks.json
 ├── monitors/

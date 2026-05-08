@@ -4,5 +4,11 @@
     "command": "tail -F ${user_config.bench_path}/sites/${user_config.default_site}/logs/web.error.log ${user_config.bench_path}/sites/${user_config.default_site}/logs/worker.error.log 2>/dev/null",
     "description": "Frappe bench error log (web + worker)",
     "when": "on-skill-invoke:frappe-debug"
+  },
+  {
+    "name": "bench-access-log",
+    "command": "tail -F ${user_config.bench_path}/sites/${user_config.default_site}/logs/web.log 2>/dev/null | grep --line-buffered -E '(WARNING|ERROR| 4[0-9]{2} | 5[0-9]{2} |slow)'",
+    "description": "Frappe web access log (warnings, errors, 4xx/5xx, slow requests)",
+    "when": "on-skill-invoke:frappe-debug"
   }
 ]

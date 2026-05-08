@@ -34,8 +34,8 @@ frappe-claude/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/               # 11 specialized agents
-│       ├── commands/             # 8 user-typed slash commands
-│       ├── skills/               # 9 model-invoked skills
+│       ├── commands/             # 9 user-typed slash commands
+│       ├── skills/               # 13 model-invoked skills
 │       ├── hooks/hooks.json      # SessionStart + PostToolUse
 │       ├── monitors/monitors.json# Background bench-error-log tail
 │       └── scripts/              # Hook scripts
@@ -49,10 +49,10 @@ frappe-claude/
 A comprehensive plugin for Frappe/ERPNext development featuring:
 
 - **11 Agents** — `doctype-architect`, `frappe-backend`, `frappe-frontend`, `frappe-custom-frontend`, `react-spa-frontend`, `react-native-frontend`, `erpnext-customizer`, `frappe-debugger`, `frappe-reviewer`, `frappe-planner`, `github-workflow`
-- **8 Slash Commands** — `/frappe-fullstack` (multi-agent orchestrator), `/frappe-plan`, `/frappe-doctype-create`, `/frappe-doctype-field`, `/frappe-app`, `/frappe-bench`, `/frappe-test`, `/frappe-github`
-- **9 Skills** — `bench-commands`, `client-scripts`, `doctype-patterns`, `frappe-api`, `react-native-patterns`, `react-spa-patterns`, `server-scripts`, `frappe-debug`, `frappe-review`
+- **9 Slash Commands** — `/frappe-fullstack` (multi-agent orchestrator), `/frappe-plan`, `/frappe-doctype-create`, `/frappe-doctype-field`, `/frappe-app`, `/frappe-bench`, `/frappe-test`, `/frappe-perf`, `/frappe-github`
+- **13 Skills** — `bench-commands`, `client-scripts`, `doctype-patterns`, `frappe-api`, `react-native-patterns`, `react-spa-patterns`, `server-scripts`, `frappe-debug`, `frappe-review`, `workflow-patterns`, `print-format`, `testing-patterns`, `scheduler-and-jobs`
 - **Hooks** — auto-format Python files inside the bench on save; remind to `bench migrate` after DocType JSON or `hooks.py` edits; inject bench/site context at session start
-- **Monitor** — tails `web.error.log` and `worker.error.log` whenever the `frappe-debug` skill is invoked, so the debugger agent sees errors live
+- **Monitors** — tails `web.error.log` + `worker.error.log` and a filtered `web.log` (warnings, errors, 4xx/5xx, slow requests) whenever the `frappe-debug` skill is invoked, so the debugger agent sees both errors and problem requests live
 
 #### Git Workflow Conventions
 - Branch naming: `{type}/{task-id}-{description}` (e.g., `feature/123-payment-api`)
