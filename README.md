@@ -33,9 +33,9 @@ frappe-claude/
 │   └── frappe-fullstack/         # Full-stack Frappe plugin
 │       ├── .claude-plugin/
 │       │   └── plugin.json
-│       ├── agents/               # 10 specialized agents
+│       ├── agents/               # 11 specialized agents
 │       ├── commands/             # 8 user-typed slash commands
-│       ├── skills/               # 8 model-invoked skills
+│       ├── skills/               # 9 model-invoked skills
 │       ├── hooks/hooks.json      # SessionStart + PostToolUse
 │       ├── monitors/monitors.json# Background bench-error-log tail
 │       └── scripts/              # Hook scripts
@@ -48,9 +48,9 @@ frappe-claude/
 
 A comprehensive plugin for Frappe/ERPNext development featuring:
 
-- **10 Agents** — `doctype-architect`, `frappe-backend`, `frappe-frontend`, `frappe-custom-frontend`, `react-spa-frontend`, `react-native-frontend`, `erpnext-customizer`, `frappe-debugger`, `frappe-planner`, `github-workflow`
+- **11 Agents** — `doctype-architect`, `frappe-backend`, `frappe-frontend`, `frappe-custom-frontend`, `react-spa-frontend`, `react-native-frontend`, `erpnext-customizer`, `frappe-debugger`, `frappe-reviewer`, `frappe-planner`, `github-workflow`
 - **8 Slash Commands** — `/frappe-fullstack` (multi-agent orchestrator), `/frappe-plan`, `/frappe-doctype-create`, `/frappe-doctype-field`, `/frappe-app`, `/frappe-bench`, `/frappe-test`, `/frappe-github`
-- **8 Skills** — `bench-commands`, `client-scripts`, `doctype-patterns`, `frappe-api`, `react-native-patterns`, `react-spa-patterns`, `server-scripts`, `frappe-debug`
+- **9 Skills** — `bench-commands`, `client-scripts`, `doctype-patterns`, `frappe-api`, `react-native-patterns`, `react-spa-patterns`, `server-scripts`, `frappe-debug`, `frappe-review`
 - **Hooks** — auto-format Python files inside the bench on save; remind to `bench migrate` after DocType JSON or `hooks.py` edits; inject bench/site context at session start
 - **Monitor** — tails `web.error.log` and `worker.error.log` whenever the `frappe-debug` skill is invoked, so the debugger agent sees errors live
 

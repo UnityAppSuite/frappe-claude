@@ -2,7 +2,16 @@
 
 This plugin omits `version` from `plugin.json`, so Claude Code uses the git commit SHA as the version. Each commit on `main` ships to users on `/plugin update`. Group notable changes here by SHA range or PR for release notes.
 
-## Unreleased — post cc2c934
+## Unreleased — post 3c2bd51
+
+- Added `frappe-reviewer` agent (read-only) that performs Frappe-aware code review focused on controller hook misuse, whitelisted-API auth/permission/SQL-injection risks, DocType JSON correctness, frontend patterns (React/Vue/RN/classic Frappe client scripts), `hooks.py` performance, and ERPNext customization risks.
+- Added `frappe-review` skill that auto-invokes on "review my changes", "review this PR", or a `github.com/*/pull/*` URL. Two modes:
+  - **Local diff (default)**: `git diff HEAD`; also accepts last commit / branch / file targets.
+  - **GitHub PR**: uses `gh pr view` / `gh pr diff` with the user's existing `gh auth login` or `GH_TOKEN`. Posting the review back to GitHub is opt-in only — never automatic.
+- Adopted progressive-disclosure pattern: rules split into `skills/frappe-review/references/{security,frappe-python,doctype-json,frontend}.md`. The agent loads only the references that match the file types in the diff, so context stays small for small reviews.
+- Switched output to the 🔴 Critical / 🟠 Major / 🟡 Minor / 💡 Suggestion severity scheme with a verdict (✅ Approve / 🔄 Request Changes / 💬 Needs Discussion), a "What's done well" section, and a file-by-file summary table. Includes Universal Checks (hardcode detection, dead code, naming/readability, error handling, DRY) and edge-case rules (large diffs, migrations, tests, generated files, merge commits).
+
+## post cc2c934 — alignment with current plugin spec (3c2bd51)
 
 - Removed `"version": "1.0.0"` pin from `plugin.json` so updates propagate on every commit (per https://code.claude.com/docs/en/plugins-reference#version-management).
 - Added `$schema`, `repository`, and `userConfig` (`bench_path`, `default_site`, `python_path`) to `plugin.json`.

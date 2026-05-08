@@ -1,11 +1,11 @@
 # Frappe Full Stack Plugin for Claude Code
 
-A comprehensive Claude Code plugin for Frappe Framework and ERPNext full-stack development. Bundles 10 specialized agents, 8 user commands, 8 skills, plus hooks, a background bench-error-log monitor, and one-time userConfig prompts for `bench_path` and `default_site`.
+A comprehensive Claude Code plugin for Frappe Framework and ERPNext full-stack development. Bundles 11 specialized agents, 8 user commands, 9 skills, plus hooks, a background bench-error-log monitor, and one-time userConfig prompts for `bench_path` and `default_site`.
 
 ## Features
 
 - **DocType development** — scaffold complete DocTypes with JSON, controllers, and client scripts
-- **Specialized agents** — backend, classic frontend, React SPA, React Native, custom (Doppio) frontend, ERPNext, debugging, planning, DocType architecture, GitHub workflow
+- **Specialized agents** — backend, classic frontend, React SPA, React Native, custom (Doppio) frontend, ERPNext, debugging, code review, planning, DocType architecture, GitHub workflow
 - **Bench integration** — safe execution of bench CLI commands plus a `bench-commands` reference skill
 - **Skills** — auto-invoked knowledge for Frappe patterns, APIs, and the new `frappe-debug` triage flow
 - **Hooks** — auto-format Python on save, migrate-reminders on DocType / hooks.py edits, bench context injection at session start
@@ -54,7 +54,7 @@ claude --plugin-dir ./plugins/frappe-fullstack
 
 > **Single-agent commands like `/frappe-backend`, `/react-spa`, `/frappe-debug` were removed.** Their agents (below) are still here and Claude routes to them automatically by description, or you can invoke them explicitly via `/agents`.
 
-### Agents (10)
+### Agents (11)
 
 | Agent | Description |
 |-------|-------------|
@@ -66,10 +66,11 @@ claude --plugin-dir ./plugins/frappe-fullstack
 | `react-native-frontend` | Expo / React Native mobile apps backed by Frappe |
 | `erpnext-customizer` | ERPNext customization patterns |
 | `frappe-debugger` | Deep debugging and traceback analysis |
+| `frappe-reviewer` | Frappe-aware code review (read-only) — security, permissions, hook misuse, DocType JSON correctness, frontend (React/Vue/RN) patterns; emits 🔴/🟠/🟡/💡 findings with verdict |
 | `frappe-planner` | Strategic planning with plan-mode support |
 | `github-workflow` | Branch / commit / PR conventions |
 
-### Skills (8)
+### Skills (9)
 
 | Skill | Triggers when |
 |-------|---------------|
@@ -81,6 +82,7 @@ claude --plugin-dir ./plugins/frappe-fullstack
 | `react-spa-patterns` | React SPA work backed by Frappe |
 | `react-native-patterns` | React Native / Expo work backed by Frappe |
 | `frappe-debug` | Triaging an error or unexpected behavior — also starts the bench-error-log monitor |
+| `frappe-review` | "Review my changes" / pre-commit review or `github.com/*/pull/*` URL — gathers diff (local via `git` or remote via `gh pr diff`), runs `ruff`/`eslint`, loads domain reference rules, hands off to `frappe-reviewer` |
 
 ### Hooks (`hooks/hooks.json`)
 
@@ -128,6 +130,30 @@ Add validation to ensure order total doesn't exceed customer credit limit
 ```
 The skill starts the error-log monitor, walks through standard checks, and hands off to `frappe-debugger` for the deep work.
 
+### Review changes before committing
+```
+review my changes
+```
+or explicitly:
+```
+/frappe-fullstack:frappe-review
+```
+Defaults to `git diff HEAD` (working tree). The skill collects the diff, runs `ruff`/`eslint`, then hands off to `frappe-reviewer` which loads only the domain references it needs (`security.md` always, plus `frappe-python.md` / `doctype-json.md` / `frontend.md` per file type) and emits a structured report:
+
+```
+## 🔍 Frappe Review — <scope>
+**Verdict:** ✅ Approve | 🔄 Request Changes | 💬 Needs Discussion
+**Issues:** 🔴 n  🟠 n  🟡 n  💡 n
+### 🌟 What's done well   ### 🔴 Critical   ### 🟠 Major   ### 🟡 Minor   ### 💡 Suggestions
+### File-by-file summary  | path | status | issues |
+```
+
+### Review a GitHub PR
+```
+review https://github.com/owner/repo/pull/123
+```
+Switches to PR mode: uses `gh pr view` / `gh pr diff` (your existing `gh auth login` or `GH_TOKEN`). The review surfaces in chat. **Posting the review back to the PR requires you to explicitly say "post the review"** — never automatic.
+
 ### Scaffolding
 ```
 /frappe-doctype-create "Project Task" my_module
@@ -156,9 +182,16 @@ The skill starts the error-log monitor, walks through standard checks, and hands
 frappe-fullstack/
 ├── .claude-plugin/
 │   └── plugin.json              # Manifest — no `version` (uses git SHA)
-├── agents/                      # 10 .md files, all with frontmatter
+├── agents/                      # 11 .md files, all with frontmatter
 ├── commands/                    # 8 .md files (user-typed entry points)
-├── skills/                      # 8 SKILL.md folders (model-invoked)
+├── skills/                      # 9 SKILL.md folders (model-invoked)
+│   └── frappe-review/
+│       ├── SKILL.md
+│       └── references/          # Progressive-disclosure rule files
+│           ├── security.md      # Always loaded
+│           ├── frappe-python.md # Loaded for *.py / hooks.py / Jinja
+│           ├── doctype-json.md  # Loaded for doctype/*.json
+│           └── frontend.md      # Loaded for *.{js,ts,tsx,vue}
 ├── hooks/
 │   └── hooks.json
 ├── monitors/
@@ -183,6 +216,7 @@ frappe-fullstack/
 | react-native-frontend | - | ✓✓ | - | - | ✓✓✓ (Expo) | - | - |
 | erpnext-customizer | ✓✓ | ✓ | ✓ | ✓✓✓ | - | - | - |
 | frappe-debugger | ✓ | ✓ | ✓ | ✓ | - | ✓✓✓ | - |
+| frappe-reviewer | ✓✓ | ✓✓ | ✓✓ | ✓✓ | ✓ | ✓ | - |
 | frappe-planner | ✓ | ✓ | ✓✓ | ✓✓ | ✓ | - | ✓✓✓ |
 | github-workflow | - | - | - | - | - | - | ✓ |
 
